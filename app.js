@@ -6,7 +6,6 @@ var logger = require('morgan');
 let bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session)
-const verifyToken = require('./verifyToken')
 const routerConfig = require('./routes')
 
 
@@ -32,7 +31,7 @@ app.use(session({
     url: 'mongodb://localhost:27017/sessionblog',
     'collection':'sessions',// 存在哪个集合里，默认为sessions	
     //'ttl':10, // session过期时间
-    'autoRemove': 'native',// mongo2.2+自动移除过期的session，disable为禁用
+    'autoRemove': 'disable',// mongo2.2+自动移除过期的session，disable为禁用
     //'autoRemoveInterval': 10, //移除过期session间隔时间,默认为10分钟
     //'touchAfter': 24 * 3600 //同步session间隔，默认每次请求都会同步到数据库
   }),

@@ -40,6 +40,12 @@ function index(req, res, next) {
 	})
 }
 
+/**
+ * 获取用户数据列表
+ * @param {请求对象} req 
+ * @param {响应对象} res 
+ * @param {*} next 
+ */
 function getUserList(req, res, next) {
 	let pageNum = parseInt(req.body.pageNum || 1);
 	let pageSize = req.body.pageSize || 5;
@@ -60,12 +66,15 @@ function getUserList(req, res, next) {
 				}
 
 				pageData.userList = docs
+			
 				res.json({
 					status: 'success',
 					code: 200,
 					text: '获取成功',
 					data: pageData
 				})
+				
+			
 			});
 	})
 }

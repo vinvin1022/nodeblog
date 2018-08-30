@@ -3,6 +3,12 @@ const crypto = require('crypto')
 const jsonwebtoken = require('jsonwebtoken')
 const key = "pwd!!"
 
+/**
+ * 登陆
+ * @param {请求对象} req 
+ * @param {响应对象} res 
+ * @param {*} next 
+ */
 function login(req, res, next) {
 	const body = req.body;
 	let loginPwd = aesEncrypt(body.loginPwd, key)
@@ -21,7 +27,6 @@ function login(req, res, next) {
 				email,
 				loginPwd
 			} = result
-			console.log(result)
 			const token = jsonwebtoken.sign({
 				username: userName,
 				password: loginPwd
@@ -62,7 +67,7 @@ function login(req, res, next) {
 			let ip = _getClientIp(req)
 			user.update({memberCellphone:memberCellphone},{loginIp:ip},{multi:false,upsert: false}, (err, raw) => {
 				if (err) return false;
-				console.log('The raw response from Mongo was ', raw);
+				console.log('更新数据成功');
 			})
 
 			// res.cookie('isLogin', 1,  { expires: new Date(Date.now() + _setmaxAge(60)) });
@@ -91,7 +96,12 @@ function login(req, res, next) {
 }
 
 
-
+/**
+ * 登出
+ * @param {请求对象} req 
+ * @param {响应对象} res 
+ * @param {*} next 
+ */
 function logout(req, res, next) {
 	req.session.cookie.expires = new Date(Date.now() - 60);
 	res.json({
@@ -102,6 +112,13 @@ function logout(req, res, next) {
 	})
 }
 
+
+/**
+ * 注册
+ * @param {请求对象} req 
+ * @param {响应对象} res 
+ * @param {*} next 
+ */
 function register(req, res, next) {
 	if (!req.body.memberCellphone || !req.body.userName || !req.body.email || !req.body.loginPwd || (req.body.loginPwd !== req.body.tooLoginPwd)) {
 		res.json({
@@ -175,9 +192,7 @@ function _getClientIp(req) {
 		req.socket.remoteAddress ||
 		req.connection.socket.remoteAddress || '';
 		ip = ip.match(/\d+.\d+.\d+.\d+/);
-		console.log(ip);
 		ip = ip ? ip.join('.') : null;
-		console.log(ip);
 		return ip
 };
 

@@ -3,6 +3,21 @@ const crypto = require('crypto')
 const jsonwebtoken = require('jsonwebtoken')
 const key = "pwd!!"
 
+
+function uploadavatar(req, res, next) {
+	var file = req.file;
+	console.log('文件类型：%s', file.mimetype);
+	console.log('原始文件名：%s', file.originalname);
+	console.log('文件大小：%s', file.size);
+	console.log('文件保存路径：%s', file.path);
+	res.json({
+		code: 200,
+		text: '上传成功',
+		status: 'success',
+		data:{path:file.path}
+	})
+}
+
 /**
  * 登陆
  * @param {请求对象} req 
@@ -43,8 +58,8 @@ function login(req, res, next) {
 				email
 			}
 			// 设置sessionid过期时间
-			_setSessionIdExpires(req)
-			
+			req.session.cookie.expires = _setExpires(req)
+			res.cookie('isLogin', 1,  { 'signed': true, expires:  _setExpires(req)});
 
 
 
@@ -70,7 +85,7 @@ function login(req, res, next) {
 				console.log('更新数据成功');
 			})
 
-			// res.cookie('isLogin', 1,  { expires: new Date(Date.now() + _setmaxAge(60)) });
+			
 
 			res.json({
 				status: 'success',
@@ -104,6 +119,8 @@ function login(req, res, next) {
  */
 function logout(req, res, next) {
 	req.session.cookie.expires = new Date(Date.now() - 60);
+	res.clearCookie('isLogin')
+
 	res.json({
 		code: 200,
 		status: 'success',
@@ -174,12 +191,13 @@ function aesDecrypt(encrypted, key) {
  * 设置过期时间
  * @param {请求对象} req 
  */
-function _setSessionIdExpires(req) {
+function _setExpires(req) {
 	let maxAge = null
 	if (req.body.maxAge) {
 		maxAge = new Date(Date.now() + req.body.maxAge)
 	}
-	req.session.cookie.expires = maxAge;
+	return maxAge
+
 }
 
 /**
@@ -255,5 +273,6 @@ function _addUser(req, res) {
 module.exports = {
 	login,
 	register,
-	logout
+	logout,
+	uploadavatar
 }

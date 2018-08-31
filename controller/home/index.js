@@ -47,6 +47,7 @@ function index(req, res, next) {
  * @param {*} next 
  */
 function getUserList(req, res, next) {
+	console.log(req.signedCookies)
 	let pageNum = parseInt(req.body.pageNum || 1);
 	let pageSize = req.body.pageSize || 5;
 	users.count((err, count) => {

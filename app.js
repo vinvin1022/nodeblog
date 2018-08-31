@@ -10,6 +10,14 @@ const routerConfig = require('./routes')
 
 
 var app = express();
+app.all('*', function(req, res, next) {  
+  res.header("Access-Control-Allow-Origin", "*");  
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");  
+  res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");  
+  res.header("X-Powered-By",' 3.2.1')  
+  res.header("Content-Type", "application/json;charset=utf-8");  
+  next();  
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,7 +30,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
-app.use(cookieParser());
+app.use(cookieParser('blog'));  // 需要传一个自定义字符串作为secret
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 使用 session 中间件
@@ -36,7 +44,7 @@ app.use(session({
     //'touchAfter': 24 * 3600 //同步session间隔，默认每次请求都会同步到数据库
   }),
   name:'sessionid',
-  cookie: { maxAge: null }, //默认1小时  单位秒
+  cookie: { maxAge: null,httpOnly:false }, //默认1小时  单位秒
   secret: 'sessionblog',
   resave: false,    // true强制更新 session
   saveUninitialized: false,  // 设置为 false，强制创建一个 session，即使用户未登录

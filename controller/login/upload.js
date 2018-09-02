@@ -9,7 +9,7 @@ var storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         // 将保存文件名设置为 时间戳 + 文件原始名，比如 151342376785-123.jpg
-        cb(null, Date.now() + "-" + file.originalname);  
+        cb(null, Date.now() + "_" + file.originalname);  
     }
 });
 

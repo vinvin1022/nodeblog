@@ -6,15 +6,16 @@ const key = "pwd!!"
 
 function uploadavatar(req, res, next) {
 	var file = req.file;
-	console.log('文件类型：%s', file.mimetype);
-	console.log('原始文件名：%s', file.originalname);
-	console.log('文件大小：%s', file.size);
-	console.log('文件保存路径：%s', file.path);
+	// console.log('文件类型：%s', file.mimetype);
+	// console.log('原始文件名：%s', file.originalname);
+	// console.log('文件大小：%s', file.size);
+	// console.log('文件保存路径：%s', file.path);
+	let path = `http://${req.headers.host}/${file.path.substring(7).replace(/\\/g, '/')}`
 	res.json({
 		code: 200,
 		text: '上传成功',
 		status: 'success',
-		data:{path:file.path}
+		data:{path: path}
 	})
 }
 
@@ -40,7 +41,8 @@ function login(req, res, next) {
 				memberCellphone,
 				userName,
 				email,
-				loginPwd
+				loginPwd,
+				avatarSrc
 			} = result
 			const token = jsonwebtoken.sign({
 				username: userName,
@@ -96,7 +98,8 @@ function login(req, res, next) {
 					uid: _id,
 					memberCellphone: memberCellphone,
 					userName: userName,
-					email: email
+					email: email,
+					avatarSrc: avatarSrc
 				}
 			})
 		} else {
@@ -229,7 +232,8 @@ function _addUser(req, res) {
 		userName: req.body.userName,
 		email: req.body.email,
 		loginPwd: loginPwd,
-		regIp: ip
+		regIp: ip,
+		avatarSrc:req.body.avatarSrc
 	}
 	
 	user.create(data, (err, docs) => {

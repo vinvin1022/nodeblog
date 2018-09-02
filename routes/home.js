@@ -10,7 +10,7 @@ const upload = require('../controller/login/upload')
 router.post('/logout',loginCtroller.logout)
 router.post('/login', loginCtroller.login);
 router.post('/register', loginCtroller.register);
-router.post('/uploadavatar',upload.single('file'), loginCtroller.uploadavatar);
+router.post('/uploadavatar',upload.single('avatar'), loginCtroller.uploadavatar);
 
 
 router.get('/', homeCtroller.index);

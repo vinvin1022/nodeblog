@@ -5,7 +5,8 @@ let userSchema = new mongoose.Schema({
     email: { type: String },
     loginPwd: { type: String},
     regIp: {type:String},
-    loginIp: {type:String}
+    loginIp: {type:String},
+    avatarSrc: {type: String}
 });
 
 //生成一个具体user的model并导出

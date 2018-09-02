@@ -58,7 +58,7 @@ function getUserList(req, res, next) {
 			totalResult: count
 		});
 		let pageData = paginator.getPaginationData()
-		users.find({}, ['userName', 'memberCellphone', 'email','loginIp', 'regIp'])
+		users.find({}, ['userName', 'memberCellphone', 'email','loginIp', 'regIp', 'avatarSrc'])
 			.skip((pageNum - 1) * pageSize)  // 从哪条数据开始
 			.limit(pageSize)         // 每一页取多少条数据
 			.exec(function (err, docs) {
